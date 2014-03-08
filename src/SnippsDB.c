@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include "SnippsDB.h"
 #include "Category.h"
+#include "CategoryWatcher.h"
 #include "list.h"
 
 struct _SnippsDB_Functions SnippsDB_Functions = {
     .free = SnippsDB_free,
     .getCategoryList = SnippsDB_getCategoryList,
-    .watchCategories = SnippsDB_watchCategories
+    .watchCategories = SnippsDB_watchCategories,
+    .unwatchCategories = SnippsDB_unwatchCategories
 };
 
 struct _SnippsDB* SnippsDB_initialize(const char* fileName)
@@ -81,8 +83,15 @@ struct _List* SnippsDB_getCategoryList(struct _SnippsDB* db, int parent)
     return categoryList;
 }
 
-struct _List* SnippsDB_watchCategories(struct _SnippsDB* db, int parent)
+/**< @brief links a callback handler to the database to monitor changes for the categories */
+void SnippsDB_watchCategories(struct _SnippsDB* db, struct _CategoryWatcherHandle* handle)
 {
-    /* @TODO: return CategoryWatcher, holds _ListItem* for deletion, need a callback function as parameter */
-    return 0;
+    db->categoryWatchers->func->pushBack(db->categoryWatchers, handle);
+    handle->item = db->categoryWatchers->last;
+}
+
+/**< @brief unlinks a callback handler; see SnippsDB_watchCategories */
+void SnippsDB_unwatchCategories(struct _SnippsDB* db, struct _CategoryWatcherHandle* handle)
+{
+    db->categoryWatchers->func->erase(db->categoryWatchers, handle->item);
 }
