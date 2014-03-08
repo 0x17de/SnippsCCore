@@ -1,6 +1,11 @@
 #include <assert.h>
 #include "list.h"
 
+/* @TODO:
+- destructor test
+- free test - uses destructor? no leak?
+*/
+
 void testList()
 {
     int insertableItem = 2;
