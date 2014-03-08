@@ -18,7 +18,9 @@ struct _CategoryWatcherHandle;
 struct _SnippsDB_Functions {
     void (*free)(struct _SnippsDB* db);
     struct _List* (*getCategoryList)(struct _SnippsDB* db, int parent);
+    /** @brief links a callback handler to the database to monitor changes for the categories */
     void (*watchCategories)(struct _SnippsDB* db, struct _CategoryWatcherHandle* handle);
+    /** @brief unlinks a callback handler; see SnippsDB_watchCategories */
     void (*unwatchCategories)(struct _SnippsDB* db, struct _CategoryWatcherHandle* handle);
 };
 

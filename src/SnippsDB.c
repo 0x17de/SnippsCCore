@@ -83,14 +83,12 @@ struct _List* SnippsDB_getCategoryList(struct _SnippsDB* db, int parent)
     return categoryList;
 }
 
-/**< @brief links a callback handler to the database to monitor changes for the categories */
 void SnippsDB_watchCategories(struct _SnippsDB* db, struct _CategoryWatcherHandle* handle)
 {
     db->categoryWatchers->func->pushBack(db->categoryWatchers, handle);
     handle->item = db->categoryWatchers->last;
 }
 
-/**< @brief unlinks a callback handler; see SnippsDB_watchCategories */
 void SnippsDB_unwatchCategories(struct _SnippsDB* db, struct _CategoryWatcherHandle* handle)
 {
     db->categoryWatchers->func->erase(db->categoryWatchers, handle->item);
