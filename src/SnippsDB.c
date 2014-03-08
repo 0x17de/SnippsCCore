@@ -6,7 +6,7 @@ struct _SnippsDB_Functions SnippsDB_Functions = {
     .watchCategory = SnippsDB_watchCategory
 };
 
-struct _SnippsDB* SnippsDB_initialize()
+struct _SnippsDB* SnippsDB_initialize(const char* fileName)
 {
     /* initialize class */
     struct _SnippsDB* db = malloc(sizeof(struct _SnippsDB));
@@ -16,7 +16,7 @@ struct _SnippsDB* SnippsDB_initialize()
     db->db = 0;
 
     /* open database */
-    if (!sqlite3_open("_test.db", &db->db) == SQLITE_OK)
+    if (!sqlite3_open(fileName, &db->db) == SQLITE_OK)
     {
         db->func->free(db);
         return 0;

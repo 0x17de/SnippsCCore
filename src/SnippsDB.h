@@ -22,7 +22,7 @@ struct _SnippsDB_Functions {
 
 extern struct _SnippsDB_Functions SnippsDB_Functions;
 
-struct _SnippsDB* SnippsDB_initialize();
+struct _SnippsDB* SnippsDB_initialize(const char* fileName);
 void SnippsDB_free(struct _SnippsDB* db);
 
 struct _Category* SnippsDB_watchCategory(struct _SnippsDB* db, int categoryId);
