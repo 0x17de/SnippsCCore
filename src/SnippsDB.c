@@ -1,9 +1,12 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "SnippsDB.h"
+#include "Category.h"
+#include "list.h"
 
 struct _SnippsDB_Functions SnippsDB_Functions = {
     .free = SnippsDB_free,
-    .watchCategory = SnippsDB_watchCategory
+    .watchCategories = SnippsDB_watchCategories
 };
 
 struct _SnippsDB* SnippsDB_initialize(const char* fileName)
@@ -36,8 +39,43 @@ void SnippsDB_free(struct _SnippsDB* db)
     free(db);
 }
 
-struct _Category* SnippsDB_watchCategory(struct _SnippsDB* db, int categoryId)
+static void freeCategory(void* data)
 {
-    /* @TODO */
-    return 0;
+    ((struct _Category*)data)->func->free(data);
+}
+
+struct _List* SnippsDB_watchCategories(struct _SnippsDB* db, int parent)
+{
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db->db, "SELECT id, text, (SELECT COUNT(*) FROM categories WHERE parent = id) as subitems FROM categories WHERE parent = ?", 0, &stmt, 0);
+    sqlite3_bind_int(stmt, 1, parent);
+
+    struct _List* categoryList = List_initialize(freeCategory);
+
+    while(1) /* while lines available */
+    {
+        int s = sqlite3_step(stmt);
+        if (s == SQLITE_ROW) /* a single row */
+        {
+            int id = sqlite3_column_int(stmt, 1);
+            const char* text = (const char*)sqlite3_column_text(stmt, 2);
+            int subitemCount = (const char*)sqlite3_column_text(stmt, 3);
+
+            struct _Category* category = Category_initialize(id, text, subitemCount);
+            categoryList->func->pushBack(categoryList, category);
+        }
+        else if (s == SQLITE_DONE) /* done */
+        {
+            break;
+        }
+        else /* error */
+        {
+            fputs("SnippsDB_watchCategory: sqlite3 error\n", stderr);
+            break;
+        }
+    }
+
+    sqlite3_finalize(stmt);
+
+    return categoryList;
 }

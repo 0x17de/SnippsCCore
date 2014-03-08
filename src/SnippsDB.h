@@ -15,7 +15,7 @@ struct _SnippsDB {
 
 struct _SnippsDB_Functions {
     void (*free)(struct _SnippsDB* db);
-    struct _Category* (*watchCategory)(struct _SnippsDB* db, int categoryId);
+    struct _List* (*watchCategories)(struct _SnippsDB* db, int parent);
 };
 
 /* --- FUNCTIONS --- */
@@ -25,6 +25,6 @@ extern struct _SnippsDB_Functions SnippsDB_Functions;
 struct _SnippsDB* SnippsDB_initialize(const char* fileName);
 void SnippsDB_free(struct _SnippsDB* db);
 
-struct _Category* SnippsDB_watchCategory(struct _SnippsDB* db, int categoryId);
+struct _List* SnippsDB_watchCategories(struct _SnippsDB* db, int parent);
 
 #endif /* SNIPPSDB_H_INCLUDED */
