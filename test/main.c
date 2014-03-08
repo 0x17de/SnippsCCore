@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 void testList();
+void testSnippsDB();
 
 int main()
 {
