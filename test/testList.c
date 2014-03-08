@@ -1,12 +1,7 @@
 #include <assert.h>
 #include "list.h"
 
-/* @TODO:
-- destructor test
-- free test - uses destructor? no leak?
-*/
-
-void testList()
+static void testList_1()
 {
     int insertableItem = 2;
     struct _ListItem* insertItem;
@@ -65,4 +60,27 @@ void testList()
     }
 
     list->func->free(list);
+}
+
+static void testList_2_destructor(int* data)
+{
+    *data -= 1;
+}
+
+static void testList_2()
+{
+    /* the destructor decrements the value */
+    int useCount = 1;
+
+    struct _List* list = List_initialize(testList_2_destructor);
+    list->func->pushBack(list, &useCount);
+    list->func->free(list);
+
+    assert(useCount == 0);
+}
+
+void testList()
+{
+    testList_1();
+    testList_2();
 }
