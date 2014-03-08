@@ -6,6 +6,7 @@
 
 struct _SnippsDB_Functions SnippsDB_Functions = {
     .free = SnippsDB_free,
+    .getCategoryList = SnippsDB_getCategoryList,
     .watchCategories = SnippsDB_watchCategories
 };
 
@@ -44,7 +45,7 @@ static void freeCategory(void* data)
     ((struct _Category*)data)->func->free(data);
 }
 
-struct _List* SnippsDB_watchCategories(struct _SnippsDB* db, int parent)
+struct _List* SnippsDB_getCategoryList(struct _SnippsDB* db, int parent)
 {
     sqlite3_stmt* stmt;
     sqlite3_prepare_v2(db->db, "SELECT id, text, (SELECT COUNT(*) FROM categories WHERE parent = id) as subitems FROM categories WHERE parent = ?", 0, &stmt, 0);
@@ -59,7 +60,7 @@ struct _List* SnippsDB_watchCategories(struct _SnippsDB* db, int parent)
         {
             int id = sqlite3_column_int(stmt, 1);
             const char* text = (const char*)sqlite3_column_text(stmt, 2);
-            int subitemCount = (const char*)sqlite3_column_text(stmt, 3);
+            int subitemCount = sqlite3_column_int(stmt, 3);
 
             struct _Category* category = Category_initialize(id, text, subitemCount);
             categoryList->func->pushBack(categoryList, category);
@@ -78,4 +79,10 @@ struct _List* SnippsDB_watchCategories(struct _SnippsDB* db, int parent)
     sqlite3_finalize(stmt);
 
     return categoryList;
+}
+
+struct _List* SnippsDB_watchCategories(struct _SnippsDB* db, int parent)
+{
+    /* @TODO: return CategoryWatcher, holds _ListItem* for deletion, need a callback function as parameter */
+    return 0;
 }

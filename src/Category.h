@@ -8,6 +8,7 @@ struct _Category {
 
     int categoryId;
     char* categoryTitle;
+    int subitemCount;
 };
 
 /* --- METHODS --- */
@@ -18,7 +19,7 @@ struct _Category_Functions {
 
 /* --- FUNCTIONS --- */
 
-struct _Category* Category_initialize(int categoryId, const char* categoryTitle);
+struct _Category* Category_initialize(int categoryId, const char* categoryTitle, int subitemCount);
 void Category_free(struct _Category* category);
 
 

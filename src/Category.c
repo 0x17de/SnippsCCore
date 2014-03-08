@@ -7,7 +7,7 @@ struct _Category_Functions Category_Functions = {
     .free = Category_free
 };
 
-struct _Category* Category_initialize(int categoryId, const char* categoryTitle)
+struct _Category* Category_initialize(int categoryId, const char* categoryTitle, int subitemCount)
 {
     /* initialize class */
     struct _Category* category = malloc(sizeof(struct _Category));
@@ -16,6 +16,7 @@ struct _Category* Category_initialize(int categoryId, const char* categoryTitle)
     /* initialize variables */
     category->categoryId = categoryId;
     category->categoryTitle = strdup(categoryTitle); /* create a copy */
+    category->subitemCount = subitemCount;
 
     return category;
 }
