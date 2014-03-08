@@ -30,7 +30,6 @@ void SnippsDB_free(struct _SnippsDB* db)
     if (db->db)
     {
         sqlite3_close(db->db);
-        db->db = 0;
     }
 
     /* cleanup memory */
