@@ -3,3 +3,5 @@ obj
 *.layout
 *.depend
 *.cbp
+*.db
+html

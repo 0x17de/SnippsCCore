@@ -7,6 +7,7 @@ static void testList_1()
     struct _ListItem* insertItem;
 
     struct _List* list = List_initialize(0);
+    assert(list != 0);
 
     /* check for empty list */
     {
