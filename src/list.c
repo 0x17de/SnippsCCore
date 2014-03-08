@@ -7,7 +7,8 @@ struct _ListItem_Functions ListItem_Functions = {
 
 struct _List_Functions List_Functions = {
     .free = List_free,
-    .pushBack = List_pushBack
+    .pushBack = List_pushBack,
+    .erase = List_erase
 };
 
 struct _ListItem* ListItem_initialize(void* data)
@@ -78,3 +79,32 @@ struct _ListItem* List_pushBack(struct _List* list, void* data)
     return item;
 }
 
+struct _ListItem* List_erase(struct _List* list, struct _ListItem* item)
+{
+    struct _ListItem* previous = item->previous;
+    struct _ListItem* next = item->next;
+
+    /* adjust previous or first item */
+    if (list->first == item)
+    {
+        list->first = next;
+    }
+    else
+    {
+        previous->next = next;
+    }
+    /* adjust last or next item */
+    if (list->last == item)
+    {
+        list->last = previous;
+    }
+    else
+    {
+        next->previous = previous;
+    }
+
+    /* cleanup memory */
+    item->func->free(item, list->itemDataDestructor);
+
+    return next;
+}

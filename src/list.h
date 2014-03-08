@@ -31,6 +31,7 @@ extern struct _ListItem_Functions _ListItem_Functions;
 struct _List_Functions {
     void (*free)(struct _List* list);
     struct _ListItem* (*pushBack)(struct _List* list, void* data);
+    struct _ListItem* (*erase)(struct _List* list, struct _ListItem* item);
 };
 extern struct _List_Functions List_Functions;
 
@@ -44,5 +45,6 @@ struct _List* List_initialize(void (*itemDataDestructor)(void*));
 void List_free(struct _List* list);
 
 struct _ListItem* List_pushBack(struct _List* list, void* data);
+struct _ListItem* List_erase(struct _List* list, struct _ListItem* item);
 
 #endif /* LIST_H_INCLUDED */
