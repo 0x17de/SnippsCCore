@@ -62,9 +62,9 @@ static void testList_1()
     list->func->free(list);
 }
 
-static void testList_2_destructor(int* data)
+static void testList_2_destructor(void* data)
 {
-    *data -= 1;
+    *(int*)data -= 1;
 }
 
 static void testList_2()
